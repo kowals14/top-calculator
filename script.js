@@ -1,8 +1,5 @@
-const operate = function(args) {
-	let a = args[0];
-	let b = args[1];
-
-	switch(args[2]) {
+const operate = function(a, b, operator) {
+	switch(operator) {
 		case "+":
 			return a + b;
 		case "-":
@@ -16,14 +13,9 @@ const operate = function(args) {
 	}
 }
 
-const getArguments = function(entry) {
-	// parse the string for the two number parameters and the operator symbol
-	return [1, 1, "+"];
-}
-
-
 const numpad = document.querySelectorAll(".row > div");
 const display = document.getElementById("textbox");
+const args = [];
 
 numpad.forEach((num) => {
 	num.addEventListener("mousedown", (event) => {
@@ -32,12 +24,33 @@ numpad.forEach((num) => {
 		switch(key.id) {
 			case "clr":
 				display.innerHTML = "";
+				args.length = 0;
 				break;
 			case "=":
-				let entry = display.innerHTML;
-				display.innerHTML = operate(getArguments(entry));
+				if(args.length == 3) {
+					let result = operate(args[0], args[2], args[1]);
+					display.innerHTML = result;
+					args.length = 1;
+					args[0] = result;
+				}
+				break;
+			case "+" :
+			case "-" :
+			case "*" :
+			case "/" :
+				if(args.length == 1) {
+					args.push(key.id);
+					display.innerHTML = display.innerHTML + key.id;
+					console.log("Operator: " + key.id);
+				}
 				break;
 			default:
+				if(args.length == 0 || args.length == 2) {
+					args.push(Number(key.id));
+				}
+				else {
+					args[args.length - 1] = args[args.length - 1] * 10 + Number(key.id);
+				}
 				display.innerHTML = display.innerHTML + key.id;
 				break;
 		}
