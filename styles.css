@@ -1,0 +1,29 @@
+#numpad {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.row {
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+}
+
+.row > div {
+	margin: 10px;
+	border: 0px;
+	padding: 25px;
+	background: rgba(184, 188, 190, 0.65);
+}
+
+#calculator {
+	border: black 5px solid;
+	width: 315px;
+}
+
+#textbox {
+	height: 50px;
+	border: gray 5px solid;
+	font-size: 40px;
+}
