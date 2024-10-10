@@ -1,29 +1,44 @@
-#numpad {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
-.row {
-	flex: 1;
-	display: flex;
-	flex-direction: row;
-}
-
-.row > div {
-	margin: 10px;
-	border: 0px;
-	padding: 25px;
-	background: rgba(184, 188, 190, 0.65);
+#container {
+    background-color: black;
+    border: 10px solid rgba(47,47,47,1);
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: minmax(10px, auto) repeat(5, 100px);
+    gap: 2px;
 }
 
 #calculator {
-	border: black 5px solid;
-	width: 315px;
+    display: flex;
+    min-height: 95vh;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
 }
 
 #textbox {
-	height: 50px;
-	border: gray 5px solid;
-	font-size: 40px;
+    grid-column: -1 / 1;
+    background-color: #b2b9b7;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 5px;
+    font-size: 5.5em;
+    font-weight: initial;
+    text-shadow: 1.3px 1.3px #383838;
+    margin: 5px;
+}
+
+#zero {
+	grid-column: span 2;
+}
+
+button {
+    font-weight: initial;
+    font-size: 2em;
+    font-family: monospace;
+    color: black;
 }

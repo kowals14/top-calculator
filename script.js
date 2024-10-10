@@ -5,23 +5,29 @@ var operator = null;
 var newOperand = false;
 var decimal = false;
 
-const numpad = document.querySelectorAll(".row > div");
+const numpad = document.querySelectorAll("button");
 const display = document.getElementById("textbox");
 
 const operate = function() {
 	console.log("Performing operation, a: " + a + ", b: " + b + ", operator: " + operator);
+	let out;
 	switch(operator) {
 		case "+":
-			return a + b;
+			out = a + b;
+			break;
 		case "-":
-			return a - b;
+			out = a - b;
+			break;
 		case "*":
-			return a * b;
+			out = a * b;
+			break;
 		case "/":
-			return a / b;
+			out = a / b;
+			break;
 		default:
-			return "ERR";
+			out = "ERR";
 	}
+	return Math.round(out * 100) / 100;
 }
 
 const readDisplay = function() {
@@ -29,7 +35,7 @@ const readDisplay = function() {
 }
 
 const updateDisplay = function(num) {
-	display.innerHTML = num;
+	display.innerHTML = num.toString().substring(0, 14);
 }
 
 const appendDigit = function(digit) {
@@ -51,8 +57,7 @@ const resetOperation = function(num) {
 numpad.forEach((num) => {
 	num.addEventListener("mousedown", (event) => {
 		const key = event.target;
-		key.style.background = "rgba(184, 188, 190, 0.95)";
-		switch(key.id) {
+		switch(key.value) {
 			case "AC":
 				resetOperation(0);
 				break;
@@ -85,7 +90,7 @@ numpad.forEach((num) => {
 				a = readDisplay();
 				newOperand = true;
 				decimal = false;
-				operator = key.id;
+				operator = key.value;
 				break;
 			case ".":
 				// prevent adding more than one decimal point
@@ -93,19 +98,16 @@ numpad.forEach((num) => {
 				else { break; }
 			default:
 				// check if the input is too big
-				if(readDisplay().toString().length < 15) {
+				if(readDisplay().toString().length < 14) {
 					// replace the number on the screen with a digit if the number is 0 or 
 					// we are creating a new operand 
 					if(newOperand || readDisplay() == 0) {
-						updateDisplay(key.id);
+						updateDisplay(key.value);
 						newOperand = false;
 					}
 					// otherwise we just append the digit to the end of the value on the display
-					else { appendDigit(key.id); }
+					else { appendDigit(key.value); }
 				}
 		}	
-	});
-	num.addEventListener("mouseup", (event) => {
-		event.target.style.background = "rgba(184, 188, 190, 0.65)";
 	});
 });
