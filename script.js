@@ -66,6 +66,9 @@ numpad.forEach((num) => {
 					break;
 				}
 				break;
+			case "%":
+				updateDisplay(readDisplay() / 100);
+				break;
 			case "+/-":
 				updateDisplay(readDisplay() * -1);
 				break;
@@ -78,12 +81,14 @@ numpad.forEach((num) => {
 				operator = key.id;
 				break;
 			default:
-				if(newOperand || readDisplay() == 0) {
-					updateDisplay(key.id);
-					newOperand = false;
-				}
-				else {
-					appendDigit(key.id);
+				if(readDisplay().toString().length < 15) {
+					if(newOperand || readDisplay() == 0) {
+						updateDisplay(key.id);
+						newOperand = false;
+					}
+					else {
+						appendDigit(key.id);
+					}
 				}
 				break;
 		}	
