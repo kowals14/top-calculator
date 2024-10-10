@@ -1,4 +1,14 @@
-const operate = function(a, b, operator) {
+var a = 0;
+var b = 0;
+var operator = null;
+
+var newOperand = false;
+
+const numpad = document.querySelectorAll(".row > div");
+const display = document.getElementById("textbox");
+
+const operate = function() {
+	console.log("Performing operation, a: " + a + ", b: " + b + ", operator: " + operator);
 	switch(operator) {
 		case "+":
 			return a + b;
@@ -13,48 +23,70 @@ const operate = function(a, b, operator) {
 	}
 }
 
-const numpad = document.querySelectorAll(".row > div");
-const display = document.getElementById("textbox");
-const args = [];
+const readDisplay = function() {
+	console.log("Reading display: " + Number(display.innerHTML));
+	return Number(display.innerHTML);
+}
+
+const updateDisplay = function(num) {
+	display.innerHTML = num;
+}
+
+const appendDigit = function(digit) {
+	display.innerHTML = display.innerHTML + digit;
+}
+
+// this function updates the display with a new initial operand
+// and sets the necessary conditions to input a new operator and operand
+const resetOperation = function(num) {
+	a = num;
+	updateDisplay(num);
+	operator = null;
+	newOperand = false;
+	console.log("Resetting operation, initializing a with: " + a);
+}
 
 numpad.forEach((num) => {
 	num.addEventListener("mousedown", (event) => {
 		const key = event.target;
 		key.style.background = "rgba(184, 188, 190, 0.95)";
 		switch(key.id) {
-			case "clr":
-				display.innerHTML = "";
-				args.length = 0;
+			case "AC":
+				resetOperation(0);
 				break;
 			case "=":
-				if(args.length == 3) {
-					let result = operate(args[0], args[2], args[1]);
-					display.innerHTML = result;
-					args.length = 1;
-					args[0] = result;
+				if(operator) {
+					b = readDisplay();
+					// divide by zero check
+					if(operator == "/" && b == 0) {
+						resetOperation("ERR");
+						break; 
+					}
+					resetOperation(operate());
+					break;
 				}
 				break;
-			case "+" :
-			case "-" :
-			case "*" :
-			case "/" :
-				if(args.length == 1) {
-					args.push(key.id);
-					display.innerHTML = display.innerHTML + key.id;
-					console.log("Operator: " + key.id);
-				}
+			case "+/-":
+				updateDisplay(readDisplay() * -1);
+				break;
+			case "+":
+			case "-":
+			case "*": 
+			case "/":
+				a = readDisplay();
+				newOperand = true;
+				operator = key.id;
 				break;
 			default:
-				if(args.length == 0 || args.length == 2) {
-					args.push(Number(key.id));
+				if(newOperand || readDisplay() == 0) {
+					updateDisplay(key.id);
+					newOperand = false;
 				}
 				else {
-					args[args.length - 1] = args[args.length - 1] * 10 + Number(key.id);
+					appendDigit(key.id);
 				}
-				display.innerHTML = display.innerHTML + key.id;
 				break;
-		}
-	
+		}	
 	});
 	num.addEventListener("mouseup", (event) => {
 		event.target.style.background = "rgba(184, 188, 190, 0.65)";
